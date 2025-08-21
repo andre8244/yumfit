@@ -1,0 +1,16 @@
+@import 'tailwindcss';
+
+@layer base {
+  /*
+    Use cursor-pointer for buttons (behavior changed from Tailwind CSS v3)
+    See: https://tailwindcss.com/docs/upgrade-guide#buttons-use-the-default-cursor
+  */
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+
+  body {
+    @apply bg-gray-50 text-sm text-gray-700 dark:bg-gray-900 dark:text-gray-100 p-4;
+  }
+}
