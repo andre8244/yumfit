@@ -1,43 +1,49 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
-import type { Ingredient } from '@/lib/ingredients'
-
-////
-const mode = import.meta.env.MODE
-
-const API_URL =
-  mode === 'development' ? 'http://localhost:3000/api' : 'https://yumfit-backend.onrender.com/api'
+import { type Ingredient, getIngredients } from '@/lib/ingredients'
+import { NeHeading, NeButton } from '@nethesis/vue-components'
+import ManageIngredientModal from '@/components/ManageIngredientModal.vue'
+import { isDevelopmentMode } from '@/lib/config'
 
 const ingredients = ref<Ingredient[]>([])
+const currentIngredient = ref<Ingredient | undefined>()
+const isShownManageIngredientModal = ref(false)
 
 onMounted(() => {
   getIngredients()
-})
-
-const getIngredients = () => {
-  return axios
-    .get(`${API_URL}/ingredients`)
     .then((res) => (ingredients.value = res.data.ingredients as Array<Ingredient>))
     .catch((error) => {
       console.error('Error fetching ingredients:', error)
       ingredients.value = []
     })
+})
+
+const showCreateIngredient = () => {
+  currentIngredient.value = undefined
+  isShownManageIngredientModal.value = true
 }
 
-const createIngredient = () => {
-  //// TODO
+const showEditIngredient = (ingredient: Ingredient) => {
+  currentIngredient.value = ingredient
+  isShownManageIngredientModal.value = true
 }
 </script>
 
 <template>
   <div class="flex flex-col gap-4 items-start">
-    <h1 class="text-2xl">Ingredients</h1>
-    <button v-if="mode === 'development'" @click="createIngredient" class="underline">
+    <NeHeading tag="h3">Ingredients</NeHeading>
+    <NeButton v-if="isDevelopmentMode" kind="secondary" @click.prevent="showCreateIngredient">
       Create ingredient
-    </button>
+    </NeButton>
     <ul>
-      <li v-for="ingredient in ingredients" :key="ingredient.id">- {{ ingredient.name }}</li>
+      <li v-for="ingredient in ingredients" :key="ingredient.id">
+        - {{ ingredient }} <NeButton @click="() => showEditIngredient(ingredient)">Edit</NeButton>
+      </li>
     </ul>
   </div>
+  <ManageIngredientModal
+    :visible="isShownManageIngredientModal"
+    :ingredient="currentIngredient"
+    @close="isShownManageIngredientModal = false"
+  />
 </template>

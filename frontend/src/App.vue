@@ -1,15 +1,24 @@
 <script setup lang="ts">
-////
-const mode = import.meta.env.MODE
+import { NeHeading, NeLink } from '@nethesis/vue-components'
+import { isDevelopmentMode } from '@/lib/config'
 </script>
 
 <template>
   <div class="flex flex-col gap-4 items-start">
-    <h1 class="text-2xl">YumFit</h1>
-    <p>Mode: {{ mode }}</p>
+    <div class="flex items-end gap-4">
+      <NeHeading tag="h1">YumFit</NeHeading>
+      <p v-if="isDevelopmentMode">dev</p>
+    </div>
     <div class="flex gap-4">
-      <router-link to="ingredients" class="underline"> Ingredients </router-link>
-      <router-link to="recipes" class="underline"> Recipes </router-link>
+      <NeLink>
+        <router-link to="ingredients"> Ingredients </router-link>
+      </NeLink>
+      <NeLink>
+        <router-link to="recipes"> Recipes </router-link>
+      </NeLink>
+      <NeLink>
+        <router-link to="compare"> Compare </router-link>
+      </NeLink>
     </div>
     <div>
       <RouterView />

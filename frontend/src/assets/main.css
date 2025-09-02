@@ -1,5 +1,9 @@
 @import 'tailwindcss';
 
+/* import theme from @nethesis/vue-components */
+@import '@nethesis/vue-components/theme.css';
+@source '../../node_modules/@nethesis/vue-components';
+
 @layer base {
   /*
     Use cursor-pointer for buttons (behavior changed from Tailwind CSS v3)
